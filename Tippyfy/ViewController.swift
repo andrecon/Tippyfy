@@ -19,6 +19,8 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var tipControl: UISegmentedControl!
     
+    @IBOutlet weak var currencyControl: UISegmentedControl!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -30,10 +32,10 @@ class ViewController: UIViewController {
     }
     
     @IBAction func calculateTip(_ sender: Any) {
-        //Get the bill amount
         
         //Everything on the left side if it's not valid, then just change it to $0
         let bill = Double(billField.text!) ?? 0
+        
         
         //Calculate the tip and total
         
@@ -43,11 +45,36 @@ class ViewController: UIViewController {
         let total = bill + tip
         
         
+        //Currency Formatter
+        let currencyFormatter = NumberFormatter()
+        
+        currencyFormatter.usesGroupingSeparator = true
+        
+        currencyFormatter.numberStyle = .currency
+        
+        let currencyString = ["en_US", "es_CR", "ja_JP"]
+        
+        //U.S Currency
+        //currencyFormatter.locale = Locale.current
+        
+        currencyFormatter.locale = Locale(identifier: currencyString[currencyControl.selectedSegmentIndex])
+        print(currencyFormatter.locale)
+        
+        let tipString = currencyFormatter.string(from: NSNumber(value: tip))!
+        let totalString = currencyFormatter.string(from: NSNumber(value: total))!
+        
+        //print(priceString)
+        //Get the bill amount
+
         //Update tip and total labels
         
         // \(variable)
-        tipLabel.text = String(format: "$%.2f", tip)
-        totalLabel.text = String(format: "$%.2f", total)
+        //tipLabel.text = String(format: "$%.2f", tip)
+        //totalLabel.text = String(format: "$%.2f", total)
+        tipLabel.text = tipString
+        totalLabel.text = totalString
+        print(tipString)
+        print(totalString)
     }
 }
 
